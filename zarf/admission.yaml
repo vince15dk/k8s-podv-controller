@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: k8s-controller
+webhooks:
+  - name: k8s-controller.default.svc.cluster.local
+    rules:
+      - operations:
+          - "CREATE"
+        apiGroups:
+          - ""
+        apiVersions:
+          - "v1"
+        resources:
+          - "pods"
+    failurePolicy: Ignore
+    sideEffects: None
+    admissionReviewVersions: ["v1", "v1beta1"]
+    clientConfig:
+      service:
+        path: "/mutate"
+        port: 443
+        name: k8s-controller
+        namespace: default
+      caBundle: `ca.crt`

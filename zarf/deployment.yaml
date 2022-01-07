@@ -1,0 +1,37 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: k8s-custom-controller
+  name: k8s-custom-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: k8s-custom-controller
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: k8s-custom-controller
+    spec:
+      containers:
+        - image: b8ce2d07-kr1-registry.container.cloud.toast.com/k8s-controller:custom-v2
+          name: k8s-custom-controller
+          resources: {}
+          ports:
+            - containerPort: 443
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-custom-controller
+spec:
+  selector:
+    run: k8s-custom-controller
+  ports:
+    - port: 443
+      targetPort: 443
